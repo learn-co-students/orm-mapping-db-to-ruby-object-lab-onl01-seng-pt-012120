@@ -76,15 +76,13 @@ class Student
     sql = <<-SQL 
       SELECT * 
       FROM students
-      WHERE grade = 9,10,11
+      WHERE grade < 12
       LIMIT 1
     SQL
     
     DB[:conn].execute(sql).collect do |row|
       self.new_from_db(row)
+    end 
   end 
-  
-  
-  
   
 end
