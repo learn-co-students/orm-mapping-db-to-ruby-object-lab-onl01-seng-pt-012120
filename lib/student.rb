@@ -12,38 +12,20 @@ class Student
   end
 
   def self.all
-    sql = <<-SQL
-      SELECT * FROM students
-    SQL
+    sql = 'SELECT * FROM students'
     rows = DB[:conn].execute(sql)
-
-    rows.map do |row|
-      self.new_from_db(row)
-    end
+    rows.map{|row| self.new_from_db(row)}
   end
 
   def self.find_by_name(name)
-    sql = <<-SQL
-      SELECT * FROM students WHERE name = ?
-    SQL
+    sql = 'SELECT * FROM students WHERE name = ?'
     name_found = DB[:conn].execute(sql, name)
 
-    self.all.map do |student|
-      if student.name == name_found[0][1]
-        return student
-      end
-    end
+    self.all.select{|student| student.name == name_found[0][1]}[0]
   end
 
   def self.all_students_in_grade_9
-    students_with_grade_9 = []
-
-    self.all.map do |student|
-      if student.grade == '9'
-        students_with_grade_9 << student
-      end
-    end
-    return students_with_grade_9
+    self.all.select{|student| student.grade == '9'}.to_a
   end
 
   def self.students_below_12th_grade
@@ -54,15 +36,13 @@ class Student
     self.all.select{|student| student.grade == '10'}[0..x-1]
   end
 
-=begin
   def self.first_student_in_grade_10
-     self.first_X_students_in_grade_10(1)
-     #binding.pry
+     self.first_X_students_in_grade_10(1)[0]
   end
-=end
+
   def self.all_students_in_grade_X(x)
-     self.all.select{|student| student.grade == x}
-     #binding.pry
+     self.all.select{|student| student.grade == x}.to_a
+     binding.pry
   end
 
   def save
