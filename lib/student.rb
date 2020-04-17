@@ -47,29 +47,21 @@ class Student
   end
 
   def self.students_below_12th_grade
-    students_below_12 = []
-
-    self.all.map do |student|
-      if student.grade < '12'
-        students_below_12 << student
-      end
-    end
-    return students_below_12
+    self.all.select{|student| student.grade < '12'}.to_a
   end
 
   def self.first_X_students_in_grade_10(x)
-    students_x = []
-
-    self.all.map do |student|
-      if student.grade == '10'
-        students_x << student
-      end
-    end
-    return students_x[0..x-1]
+    self.all.select{|student| student.grade == '10'}[0..x-1]
   end
 
+=begin
   def self.first_student_in_grade_10
      self.first_X_students_in_grade_10(1)
+     #binding.pry
+  end
+=end
+  def self.all_students_in_grade_X(x)
+     self.all.select{|student| student.grade == x}
      #binding.pry
   end
 
